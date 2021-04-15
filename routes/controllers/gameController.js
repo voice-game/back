@@ -11,10 +11,10 @@ exports.postFlappyBird = async () => {};
 exports.patchFlappyBird = async () => {};
 exports.deleteFlappyBird = async () => {};
 
-exports.getSoundBattleList = async () => {};
-exports.enterSoundBattle = async () => {};
+exports.getEnergyBattleList = async () => {};
+exports.enterEnergyBattle = async () => {};
 
-exports.getSoundBattle = async () => {};
-exports.postSoundBattle = async () => {};
-exports.patchSoundBattle = async () => {};
-exports.deleteSoundBattle = async () => {};
+exports.getEnergyBattle = async () => {};
+exports.postEnergyBattle = async () => {};
+exports.patchEnergyBattle = async () => {};
+exports.deleteEnergyBattle = async () => {};

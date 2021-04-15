@@ -5,12 +5,12 @@ const authController = require("./controllers/authController");
 router.get("/", authController.getHome);
 
 router
-  .routes("/login")
-  .get(authController.getLogIn)
-  .post(authController.postLogIn);
+  .route("/login")
+  .get(authController.getLogin)
+  .post(authController.postLogin);
 
 router
-  .routes("/logout")
+  .route("/logout")
   .get(authController.getLogOut)
   .post(authController.postLogOut);
 
