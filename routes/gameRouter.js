@@ -8,26 +8,26 @@ router
   .post(gameController.postSelectedGame);
 
 router
-  .route("/road-roller")
+  .route("/roadRoller")
   .get(gameController.getRoadRoller)
   .post(gameController.postRoadRoller)
   .patch(gameController.patchRoadRoller)
   .delete(gameController.deleteRoadRoller);
 
 router
-  .route("/flappy-bird")
+  .route("/flappyBird")
   .get(gameController.getFighterAttack)
   .post(gameController.postFighterAttack)
   .patch(gameController.patchFighterAttack)
   .delete(gameController.deleteFighterAttack);
 
 router
-  .route("/energy-battle")
+  .route("/energyBattle")
   .get(gameController.getEnergyBattleList)
-  .post(gameController.enterEnergyBattle);
+  .post(gameController.createEnergyBattle);
 
 router
-  .route("/games/energy-battle/:roomId")
+  .route("/energyBattle/:roomId")
   .get(gameController.getEnergyBattle)
   .post(gameController.postEnergyBattle)
   .patch(gameController.patchEnergyBattle)

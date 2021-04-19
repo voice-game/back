@@ -3,9 +3,14 @@ const { Schema } = mongoose;
 const { ObjectId } = Schema.Types;
 
 const RoomSchema = new Schema({
+  roomId: {
+    type: String,
+    required: true,
+    unique: true,
+  },
   title: {
     type: String,
-    enum: ["road-roller", "fighter-attack", "energy-battle"],
+    enum: ["roadRoller", "fighterAttack", "energyBattle"],
     required: true,
   },
   players: {
@@ -17,7 +22,6 @@ const RoomSchema = new Schema({
   createdBy: {
     type: ObjectId,
     ref: "Player",
-    default: "",
     required: true,
   },
   createdAt: {
