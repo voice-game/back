@@ -10,6 +10,14 @@ const mongoose = require("mongoose");
 const server = require("http").Server(app);
 const port = process.env.PORT || 5000;
 
+const io = require("socket.io")(server, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST", "PATCH", "DELETE"],
+    credentials: true,
+  },
+});
+
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
@@ -57,6 +65,28 @@ app.use((err, req, res, next) => {
 
   res.status(err.status || 500).json({
     result: "error",
+  });
+});
+
+io.on("connection", (socket) => {
+  socket.on("join-room", (roomId, playerData) => {
+    socket.join(roomId);
+    socket.broadcast.to(roomId).emit("user-connected", playerData);
+    console.log(io.sockets.adapter.rooms.get(roomId));
+
+    socket.on("input-player", (data) => {
+      socket.broadcast.to(roomId).emit("input-other-player", data);
+    });
+
+    socket.on("leave-room", () => {
+      console.log("leave-room");
+      socket.broadcast.to(roomId).emit("user-disconnected", playerData);
+    });
+
+    socket.on("disconnect", () => {
+      console.log("disconnect");
+      socket.broadcast.to(roomId).emit("user-disconnected", playerData);
+    });
   });
 });
 

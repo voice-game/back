@@ -16,10 +16,10 @@ router
 
 router
   .route("/flappy-bird")
-  .get(gameController.getFlappyBird)
-  .post(gameController.postFlappyBird)
-  .patch(gameController.patchFlappyBird)
-  .delete(gameController.deleteFlappyBird);
+  .get(gameController.getFighterAttack)
+  .post(gameController.postFighterAttack)
+  .patch(gameController.patchFighterAttack)
+  .delete(gameController.deleteFighterAttack);
 
 router
   .route("/energy-battle")

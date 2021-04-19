@@ -3,6 +3,11 @@ const { Schema } = mongoose;
 const { ObjectId } = Schema.Types;
 
 const RoomSchema = new Schema({
+  title: {
+    type: String,
+    enum: ["road-roller", "fighter-attack", "energy-battle"],
+    required: true,
+  },
   players: {
     type: [ObjectId],
     ref: "Player",
