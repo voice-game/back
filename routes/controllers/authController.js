@@ -23,5 +23,4 @@ exports.postLogin = async (req, res, next) => {
   }
 };
 
-exports.getLogOut = async () => {};
 exports.postLogOut = async () => {};
