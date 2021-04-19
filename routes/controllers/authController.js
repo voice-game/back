@@ -1,4 +1,24 @@
 const Player = require("../../models/playerModel");
+const { createToken, verifyToken } = require("../../utils/tokenHandler");
+
+exports.checkAuthorization = async (req, res, next) => {
+  try {
+    const player = await verifyToken(req.body.token);
+
+    if (!player) {
+      return res.status(401).json({
+        message: "Unauthorized",
+      });
+    }
+
+    res.status(200).json({
+      message: "Authorization Success",
+      data: player,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
 
 exports.postLogin = async (req, res, next) => {
   try {
@@ -8,19 +28,19 @@ exports.postLogin = async (req, res, next) => {
     if (!player) {
       const newPlayer = await Player.create({ playerId: uid, email });
       return res.status(201).json({
-        result: "success",
+        message: "Sign In Success",
         data: newPlayer,
       });
     }
 
+    const token = await createToken(uid);
+
     res.status(200).json({
-      result: "success",
+      message: "Log In Success",
       data: player,
+      token,
     });
   } catch (err) {
-    console.log(err);
     next(err);
   }
 };
-
-exports.postLogOut = async () => {};

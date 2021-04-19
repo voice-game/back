@@ -14,7 +14,20 @@ exports.postFighterAttack = async (req, res, next) => {};
 exports.patchFighterAttack = async (req, res, next) => {};
 exports.deleteFighterAttack = async (req, res, next) => {};
 
-exports.getEnergyBattleList = async (req, res, next) => {};
+exports.getEnergyBattleList = async (req, res, next) => {
+  try {
+    const gameTitle = req.url.slice(1);
+    const rooms = await Room.find({ title: gameTitle })
+      .populate("createdBy")
+      .populate("players");
+
+    res.status(200).json({
+      message: "success",
+      data: rooms,
+    });
+  } catch (err) {}
+};
+
 exports.createEnergyBattle = async (req, res, next) => {
   try {
     const { gameTitle, newRoomId, createdBy } = req.body;
@@ -26,7 +39,7 @@ exports.createEnergyBattle = async (req, res, next) => {
     });
 
     res.status(201).json({
-      result: "success",
+      message: "success",
       data: newRoom,
     });
   } catch (err) {
