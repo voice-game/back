@@ -6,10 +6,10 @@ exports.postRoadRoller = async () => {};
 exports.patchRoadRoller = async () => {};
 exports.deleteRoadRoller = async () => {};
 
-exports.getFlappyBird = async () => {};
-exports.postFlappyBird = async () => {};
-exports.patchFlappyBird = async () => {};
-exports.deleteFlappyBird = async () => {};
+exports.getFighterAttack = async () => {};
+exports.postFighterAttack = async () => {};
+exports.patchFighterAttack = async () => {};
+exports.deleteFighterAttack = async () => {};
 
 exports.getEnergyBattleList = async () => {};
 exports.enterEnergyBattle = async () => {};
