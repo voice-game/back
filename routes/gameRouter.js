@@ -24,7 +24,8 @@ router
 router
   .route("/energyBattle")
   .get(gameController.getEnergyBattleList)
-  .post(gameController.createEnergyBattle);
+  .post(gameController.createEnergyBattle)
+  .patch(gameController.changeRoomStatus);
 
 router
   .route("/energyBattle/:roomId")

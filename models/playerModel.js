@@ -12,6 +12,12 @@ const PlayerSchema = new Schema({
     trim: true,
     required: true,
   },
+  name: {
+    type: String,
+    trim: true,
+    default: "noname",
+    required: true,
+  },
   gameRecords: {
     roadRoller: {
       type: Number,

@@ -9,18 +9,27 @@ const app = express();
 const mongoose = require("mongoose");
 const server = require("http").Server(app);
 const port = process.env.PORT || 5000;
+const morgan = require("morgan");
+const cookieParser = require("cookie-parser");
+const cors = require("cors");
+const Pusher = require("pusher");
 
 const io = require("socket.io")(server, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: process.env.CLIENT_URL,
     methods: ["GET", "POST", "PATCH", "DELETE"],
     credentials: true,
   },
 });
 
-const morgan = require("morgan");
-const cookieParser = require("cookie-parser");
-const cors = require("cors");
+const pusher = new Pusher({
+  appId: process.env.PUSHER_APPID,
+  key: process.env.PUSHER_KEY,
+  secret: process.env.PUSHER_SECRET,
+  cluster: "ap3",
+  useTLS: true,
+});
+
 const authRouter = require("./routes/authRouter");
 const gameRouter = require("./routes/gameRouter");
 
@@ -42,6 +51,62 @@ mongoose
   .catch((err) => {
     console.log(`ERROR: ${err.name}, ${err.message}`);
   });
+
+const db = mongoose.connection;
+
+db.once("open", () => {
+  const roomCollection = db.collection("rooms");
+  const changeRooms = roomCollection.watch();
+
+  changeRooms.on("change", () => {
+    pusher.trigger("rooms", "changed", {
+      message: "room changed",
+    });
+  });
+});
+
+io.on("connection", (socket) => {
+  let creater;
+  socket.on("join-room", (roomId, playerData, createrData) => {
+    socket.join(roomId);
+    const socketSet = io.sockets.adapter.rooms.get(roomId);
+    const socketList = [...socketSet];
+    if (createrData) {
+      creater = createrData;
+    }
+
+    socket.broadcast
+      .to(roomId)
+      .emit("player-connected", { playerData, socketList });
+
+    socket.on("input-player", (data) => {
+      console.log("input-player");
+      socket.broadcast.to(roomId).emit("input-other-player", data);
+    });
+
+    socket.on("leave-creater", () => {
+      console.log("leave-creater");
+      socket.broadcast.to(roomId).emit("creater-disconnected", playerData);
+    });
+
+    socket.on("leave-player", () => {
+      console.log("leave-player");
+      socket.broadcast.to(roomId).emit("player-disconnected", playerData);
+    });
+
+    socket.on("disconnect", () => {
+      console.log("disconnect");
+      if (false) {
+        console.log("disconnect");
+        console.log(this.id);
+        console.log(io.sockets.adapter.rooms.get(roomId));
+        socket.broadcast.to(roomId).emit("creater-disconnected", playerData);
+      } else {
+        socket.broadcast.to(roomId).emit("player-disconnected", playerData);
+      }
+    });
+  });
+});
 
 app.use(cors());
 app.use(morgan("dev"));
@@ -65,28 +130,6 @@ app.use((err, req, res, next) => {
 
   res.status(err.status || 500).json({
     result: "error",
-  });
-});
-
-io.on("connection", (socket) => {
-  socket.on("join-room", (roomId, playerData) => {
-    socket.join(roomId);
-    socket.broadcast.to(roomId).emit("user-connected", playerData);
-    console.log(io.sockets.adapter.rooms.get(roomId));
-
-    socket.on("input-player", (data) => {
-      socket.broadcast.to(roomId).emit("input-other-player", data);
-    });
-
-    socket.on("leave-room", () => {
-      console.log("leave-room");
-      socket.broadcast.to(roomId).emit("user-disconnected", playerData);
-    });
-
-    socket.on("disconnect", () => {
-      console.log("disconnect");
-      socket.broadcast.to(roomId).emit("user-disconnected", playerData);
-    });
   });
 });
 

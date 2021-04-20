@@ -21,11 +21,14 @@ exports.getEnergyBattleList = async (req, res, next) => {
       .populate("createdBy")
       .populate("players");
 
-    res.status(200).json({
+    return res.status(200).json({
       message: "success",
       data: rooms,
     });
-  } catch (err) {}
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
 };
 
 exports.createEnergyBattle = async (req, res, next) => {
@@ -38,7 +41,7 @@ exports.createEnergyBattle = async (req, res, next) => {
       players: [createdBy],
     });
 
-    res.status(201).json({
+    return res.status(201).json({
       message: "success",
       data: newRoom,
     });
@@ -48,7 +51,93 @@ exports.createEnergyBattle = async (req, res, next) => {
   }
 };
 
+exports.changeRoomStatus = async (req, res, next) => {
+  try {
+    const { gameTitle, roomId, status } = req.body;
+    const updatedOne = await Room.findOneAndUpdate(
+      {
+        roomId,
+      },
+      { status }
+    );
+
+    if (!updatedOne) {
+      return res.status(304).json({
+        message: "fail",
+      });
+    }
+
+    const updatedRooms = await Room.find({ title: gameTitle });
+
+    return res.status(200).json({
+      message: "success",
+      data: updatedRooms,
+    });
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+};
+
 exports.getEnergyBattle = async (req, res, next) => {};
 exports.postEnergyBattle = async (req, res, next) => {};
-exports.patchEnergyBattle = async (req, res, next) => {};
-exports.deleteEnergyBattle = async (req, res, next) => {};
+
+exports.patchEnergyBattle = async (req, res, next) => {
+  try {
+    let updated;
+    const { type, playerData, roomId, gameTitle } = req.body;
+
+    if (type === "JOIN") {
+      updated = await Room.findOneAndUpdate(
+        { roomId },
+        { $addToSet: { players: playerData._id } }
+      );
+    }
+
+    if (type === "LEAVE") {
+      updated = await Room.findOneAndUpdate(
+        { roomId },
+        { $pull: { players: playerData._id } }
+      );
+    }
+
+    if (!updated) {
+      return res.status(304).json({
+        message: "fail",
+      });
+    }
+
+    const updatedRooms = await Room.find({ title: gameTitle });
+
+    return res.status(200).json({
+      message: "success",
+      data: updatedRooms,
+    });
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+};
+
+exports.deleteEnergyBattle = async (req, res, next) => {
+  try {
+    const { gameTitle, roomId } = req.body;
+    const deleted = await Room.findOneAndRemove({ roomId });
+
+    if (!deleted) {
+      return res.status(304).json({
+        message: "fail",
+      });
+    }
+
+    const deletedRooms = await Room.find({ title: gameTitle });
+
+    return res.status(200).json({
+      message: "success",
+      data: deletedRooms,
+    });
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+};
