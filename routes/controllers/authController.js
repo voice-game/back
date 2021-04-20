@@ -26,7 +26,11 @@ exports.postLogin = async (req, res, next) => {
     const player = await Player.findOne({ playerId: uid });
 
     if (!player) {
-      const newPlayer = await Player.create({ playerId: uid, email });
+      const newPlayer = await Player.create({
+        email,
+        playerId: uid,
+        name: displayName,
+      });
       return res.status(201).json({
         message: "Sign In Success",
         data: newPlayer,
