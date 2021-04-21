@@ -15,23 +15,29 @@ router
   .delete(gameController.deleteRoadRoller);
 
 router
-  .route("/flappyBird")
-  .get(gameController.getFighterAttack)
-  .post(gameController.postFighterAttack)
-  .patch(gameController.patchFighterAttack)
-  .delete(gameController.deleteFighterAttack);
+  .route("/fighterAttack")
+  .get(gameController.fetchRoomsDB)
+  .post(gameController.createRoomDB)
+  .patch(gameController.changeRoomStatus);
+
+router
+  .route("/fighterAttack/:roomId")
+  .get(gameController.getRoomData)
+  .post(gameController.postRoomData)
+  .patch(gameController.patchRoomData)
+  .delete(gameController.deleteRoomDB);
 
 router
   .route("/energyBattle")
-  .get(gameController.getEnergyBattleList)
-  .post(gameController.createEnergyBattle)
+  .get(gameController.fetchRoomsDB)
+  .post(gameController.createRoomDB)
   .patch(gameController.changeRoomStatus);
 
 router
   .route("/energyBattle/:roomId")
-  .get(gameController.getEnergyBattle)
-  .post(gameController.postEnergyBattle)
-  .patch(gameController.patchEnergyBattle)
-  .delete(gameController.deleteEnergyBattle);
+  .get(gameController.getRoomData)
+  .post(gameController.postRoomData)
+  .patch(gameController.patchRoomData)
+  .delete(gameController.deleteRoomDB);
 
 module.exports = router;
