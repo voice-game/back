@@ -9,12 +9,7 @@ exports.postRoadRoller = async (req, res, next) => {};
 exports.patchRoadRoller = async (req, res, next) => {};
 exports.deleteRoadRoller = async (req, res, next) => {};
 
-exports.getFighterAttack = async (req, res, next) => {};
-exports.postFighterAttack = async (req, res, next) => {};
-exports.patchFighterAttack = async (req, res, next) => {};
-exports.deleteFighterAttack = async (req, res, next) => {};
-
-exports.getEnergyBattleList = async (req, res, next) => {
+exports.fetchRoomsDB = async (req, res, next) => {
   try {
     const gameTitle = req.url.slice(1);
     const rooms = await Room.find({ title: gameTitle })
@@ -31,7 +26,7 @@ exports.getEnergyBattleList = async (req, res, next) => {
   }
 };
 
-exports.createEnergyBattle = async (req, res, next) => {
+exports.createRoomDB = async (req, res, next) => {
   try {
     const { gameTitle, newRoomId, createdBy } = req.body;
     const newRoom = await Room.create({
@@ -79,10 +74,10 @@ exports.changeRoomStatus = async (req, res, next) => {
   }
 };
 
-exports.getEnergyBattle = async (req, res, next) => {};
-exports.postEnergyBattle = async (req, res, next) => {};
+exports.getRoomData = async (req, res, next) => {};
+exports.postRoomData = async (req, res, next) => {};
 
-exports.patchEnergyBattle = async (req, res, next) => {
+exports.patchRoomData = async (req, res, next) => {
   try {
     let updated;
     const { type, playerData, roomId, gameTitle } = req.body;
@@ -119,7 +114,7 @@ exports.patchEnergyBattle = async (req, res, next) => {
   }
 };
 
-exports.deleteEnergyBattle = async (req, res, next) => {
+exports.deleteRoomDB = async (req, res, next) => {
   try {
     const { gameTitle, roomId } = req.body;
     const deleted = await Room.findOneAndRemove({ roomId });
