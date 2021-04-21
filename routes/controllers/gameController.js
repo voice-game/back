@@ -53,7 +53,7 @@ exports.changeRoomStatus = async (req, res, next) => {
       {
         roomId,
       },
-      { status }
+      { status },
     );
 
     if (!updatedOne) {
@@ -85,14 +85,14 @@ exports.patchRoomData = async (req, res, next) => {
     if (type === "JOIN") {
       updated = await Room.findOneAndUpdate(
         { roomId },
-        { $addToSet: { players: playerData._id } }
+        { $addToSet: { players: playerData._id } },
       );
     }
 
     if (type === "LEAVE") {
       updated = await Room.findOneAndUpdate(
         { roomId },
-        { $pull: { players: playerData._id } }
+        { $pull: { players: playerData._id } },
       );
     }
 
