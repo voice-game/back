@@ -16,13 +16,13 @@ router
   .delete(gameController.deleteRoomDB);
 
 router
-  .route("/fighterAttack")
+  .route("/monsterEscape")
   .get(gameController.fetchRoomsDB)
   .post(gameController.createRoomDB)
   .patch(gameController.changeRoomStatus);
 
 router
-  .route("/fighterAttack/:roomId")
+  .route("/monsterEscape/:roomId")
   .get(gameController.getRoomData)
   .post(gameController.postRoomData)
   .patch(gameController.patchRoomData)

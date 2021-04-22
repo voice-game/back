@@ -35,7 +35,7 @@ const gameRouter = require("./routes/gameRouter");
 
 const mongoURL = process.env.MONGO_URL.replace(
   "<PASSWORD>",
-  process.env.MONGO_PASSWORD
+  process.env.MONGO_PASSWORD,
 );
 
 mongoose
@@ -95,6 +95,11 @@ io.on("connection", (socket) => {
     socket.on("disconnect", () => {
       socket.broadcast.to(roomId).emit("player-disconnected", playerData);
     });
+  });
+
+  socket.on("animation", (roomId, userPosition) => {
+    socket.join(roomId);
+    socket.broadcast.to(roomId).emit("animation", userPosition);
   });
 });
 
