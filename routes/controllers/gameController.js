@@ -1,20 +1,10 @@
 const Player = require("../../models/playerModel");
 const Room = require("../../models/roomModel");
 
-exports.getSelectGame = async (req, res, next) => {};
-exports.postSelectedGame = async (req, res, next) => {};
-
-exports.getRoadRoller = async (req, res, next) => {};
-exports.postRoadRoller = async (req, res, next) => {};
-exports.patchRoadRoller = async (req, res, next) => {};
-exports.deleteRoadRoller = async (req, res, next) => {};
-
 exports.fetchRoomsDB = async (req, res, next) => {
   try {
     const gameTitle = req.url.slice(1);
-    const rooms = await Room.find({ title: gameTitle })
-      .populate("createdBy")
-      .populate("players");
+    const rooms = await Room.find({ title: gameTitle }).populate("players");
 
     return res.status(200).json({
       message: "success",
@@ -74,7 +64,27 @@ exports.changeRoomStatus = async (req, res, next) => {
   }
 };
 
-exports.getRoomData = async (req, res, next) => {};
+exports.getRoomData = async (req, res, next) => {
+  try {
+    const { roomId } = req.params;
+    console.log(roomId);
+    const currentRoom = await Room.findOne({ roomId });
+
+    if (!currentRoom) {
+      return res.status(400).json({
+        message: "fail",
+      });
+    }
+
+    return res.status(200).json({
+      message: "success",
+      data: currentRoom,
+    });
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+};
 exports.postRoomData = async (req, res, next) => {};
 
 exports.patchRoomData = async (req, res, next) => {

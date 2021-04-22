@@ -66,27 +66,25 @@ db.once("open", () => {
 });
 
 io.on("connection", (socket) => {
-  let creater;
-  socket.on("join-room", (roomId, playerData, createrData) => {
+  socket.on("join-room", (roomId, playerData) => {
+    console.log("join-room");
     socket.join(roomId);
+
     const socketSet = io.sockets.adapter.rooms.get(roomId);
     const socketList = [...socketSet];
-    if (createrData) {
-      creater = createrData;
-    }
 
     socket.broadcast
       .to(roomId)
       .emit("player-connected", { playerData, socketList });
 
     socket.on("input-player", (data) => {
-      console.log("input-player");
+      // console.log("input-player", data);
       socket.broadcast.to(roomId).emit("input-other-player", data);
     });
 
-    socket.on("leave-creater", () => {
-      console.log("leave-creater");
-      socket.broadcast.to(roomId).emit("creater-disconnected", playerData);
+    socket.on("start-game", () => {
+      console.log("start-game");
+      socket.broadcast.to(roomId).emit("start-by-other", playerData);
     });
 
     socket.on("leave-player", () => {
@@ -95,15 +93,7 @@ io.on("connection", (socket) => {
     });
 
     socket.on("disconnect", () => {
-      console.log("disconnect");
-      if (false) {
-        console.log("disconnect");
-        console.log(this.id);
-        console.log(io.sockets.adapter.rooms.get(roomId));
-        socket.broadcast.to(roomId).emit("creater-disconnected", playerData);
-      } else {
-        socket.broadcast.to(roomId).emit("player-disconnected", playerData);
-      }
+      socket.broadcast.to(roomId).emit("player-disconnected", playerData);
     });
   });
 });
