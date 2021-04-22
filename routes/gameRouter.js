@@ -3,16 +3,17 @@ const router = express.Router();
 const gameController = require("./controllers/gameController");
 
 router
-  .route("/")
-  .get(gameController.getSelectGame)
-  .post(gameController.postSelectedGame);
+  .route("/roadRoller")
+  .get(gameController.fetchRoomsDB)
+  .post(gameController.createRoomDB)
+  .patch(gameController.changeRoomStatus);
 
 router
-  .route("/roadRoller")
-  .get(gameController.getRoadRoller)
-  .post(gameController.postRoadRoller)
-  .patch(gameController.patchRoadRoller)
-  .delete(gameController.deleteRoadRoller);
+  .route("/roadRoller/:roomId")
+  .get(gameController.getRoomData)
+  .post(gameController.postRoomData)
+  .patch(gameController.patchRoomData)
+  .delete(gameController.deleteRoomDB);
 
 router
   .route("/monsterEscape")
