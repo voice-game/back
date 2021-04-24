@@ -24,7 +24,7 @@ const PlayerSchema = new Schema({
       default: 0,
       required: true,
     },
-    fighterAttack: {
+    monsterEscape: {
       type: Number,
       default: 0,
       required: true,
