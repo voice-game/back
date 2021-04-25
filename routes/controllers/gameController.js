@@ -91,7 +91,26 @@ exports.postRoomData = async (req, res, next) => {};
 exports.patchRoomData = async (req, res, next) => {
   try {
     let updated;
-    const { type, playerData, roomId, gameTitle } = req.body;
+    const { type, gameTitle, roomId, playerData, gameResult } = req.body;
+
+    if (type === "GAME_RESULT") {
+      updated = await Player.findByIdAndUpdate(playerData._id, {
+        $inc: { "gameRecords.energyBattle": 1 },
+      });
+
+      if (!updated) {
+        return res.status(304).json({
+          message: "fail",
+        });
+      }
+
+      const updatedPlayer = await Player.findById(playerData._id);
+
+      return res.status(200).json({
+        message: "success",
+        data: updatedPlayer,
+      });
+    }
 
     if (type === "JOIN") {
       updated = await Room.findOneAndUpdate(
