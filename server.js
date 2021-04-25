@@ -94,9 +94,9 @@ io.on("connection", (socket) => {
     });
   });
 
-  socket.on("animation", (roomId, userPosition) => {
+  socket.on("animation", (roomId, userData) => {
     socket.join(roomId);
-    socket.broadcast.to(roomId).emit("animation", userPosition);
+    socket.broadcast.to(roomId).emit("animation", userData);
   });
 });
 
