@@ -97,9 +97,20 @@ io.on("connection", (socket) => {
     });
   });
 
-  socket.on("animation", (roomId, userData) => {
+  socket.on("monsterescape-play", (roomId, userData) => {
     socket.join(roomId);
-    socket.broadcast.to(roomId).emit("animation", userData);
+    socket.broadcast.to(roomId).emit("monsterescape-play", userData);
+  });
+
+  socket.on("monsterescape-start", (roomId) => {
+    socket.join(roomId);
+    socket.broadcast.to(roomId).emit("monsterescape-start");
+  });
+
+  socket.on("monsterescape-finish", (roomId) => {
+    console.log("finish")
+    socket.join(roomId);
+    socket.broadcast.to(roomId).emit("monsterescape-finish");
   });
 });
 
