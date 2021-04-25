@@ -35,7 +35,7 @@ const gameRouter = require("./routes/gameRouter");
 
 const mongoURL = process.env.MONGO_URL.replace(
   "<PASSWORD>",
-  process.env.MONGO_PASSWORD,
+  process.env.MONGO_PASSWORD
 );
 
 mongoose
@@ -78,17 +78,14 @@ io.on("connection", (socket) => {
       .emit("player-connected", { playerData, socketList });
 
     socket.on("input-player", (data) => {
-      // console.log("input-player", data);
       socket.broadcast.to(roomId).emit("input-other-player", data);
     });
 
     socket.on("start-game", () => {
-      console.log("start-game");
       socket.broadcast.to(roomId).emit("start-by-other", playerData);
     });
 
     socket.on("leave-player", () => {
-      console.log("leave-player");
       socket.broadcast.to(roomId).emit("player-disconnected", playerData);
     });
 
