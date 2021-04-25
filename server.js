@@ -78,7 +78,6 @@ io.on("connection", (socket) => {
       .emit("player-connected", { playerData, socketList });
 
     socket.on("input-player", (data) => {
-      // console.log("input-player", data);
       socket.broadcast.to(roomId).emit("input-other-player", data);
     });
 
@@ -104,13 +103,17 @@ io.on("connection", (socket) => {
 
   socket.on("monsterescape-start", (roomId) => {
     socket.join(roomId);
-    socket.broadcast.to(roomId).emit("monsterescape-start");
+    io.in(roomId).emit("monsterescape-start");
+  });
+
+  socket.on("monsterescape-restart", (roomId) => {
+    socket.join(roomId);
+    io.in(roomId).emit("monsterescape-restart");
   });
 
   socket.on("monsterescape-finish", (roomId) => {
-    console.log("finish")
     socket.join(roomId);
-    socket.broadcast.to(roomId).emit("monsterescape-finish");
+    io.in(roomId).emit("monsterescape-finish");
   });
 });
 
