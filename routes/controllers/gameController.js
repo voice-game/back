@@ -67,7 +67,6 @@ exports.changeRoomStatus = async (req, res, next) => {
 exports.getRoomData = async (req, res, next) => {
   try {
     const { roomId } = req.params;
-    console.log(roomId);
     const currentRoom = await Room.findOne({ roomId });
 
     if (!currentRoom) {
@@ -147,9 +146,13 @@ exports.patchRoomData = async (req, res, next) => {
 exports.deleteRoomDB = async (req, res, next) => {
   try {
     const { gameTitle, roomId } = req.body;
+    const deleteEmpty = await Room.deleteMany(
+      { title: gameTitle },
+      { $set: { players: [] } }
+    );
     const deleted = await Room.findOneAndRemove({ roomId });
 
-    if (!deleted) {
+    if (!deleted || !deleteEmpty) {
       return res.status(304).json({
         message: "fail",
       });

@@ -48,3 +48,22 @@ exports.postLogin = async (req, res, next) => {
     next(err);
   }
 };
+
+exports.postUnAuth = async (req, res, next) => {
+  try {
+    const { playerId, name, email } = req.body;
+    const player = await Player.create({
+      email,
+      playerId,
+      name,
+    });
+
+    return res.status(201).json({
+      message: "UnAuth Mode Success",
+      data: player,
+    });
+  } catch (err) {
+    console.log(err);
+    next(err);
+  }
+};
