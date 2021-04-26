@@ -5,6 +5,11 @@ exports.checkAuthorization = async (req, res, next) => {
   try {
     const player = await verifyToken(req.body.token);
 
+    const now = new Date();
+    if (now.getMinutes === 0) {
+      await Player.deleteMany({ email: "temp@temp.temp" });
+    }
+
     if (!player) {
       return res.status(401).json({
         message: "Unauthorized",
@@ -16,6 +21,7 @@ exports.checkAuthorization = async (req, res, next) => {
       data: player,
     });
   } catch (err) {
+    console.log(err);
     next(err);
   }
 };
@@ -45,6 +51,7 @@ exports.postLogin = async (req, res, next) => {
       token,
     });
   } catch (err) {
+    console.log(err);
     next(err);
   }
 };
