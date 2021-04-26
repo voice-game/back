@@ -13,6 +13,7 @@ const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const Pusher = require("pusher");
+const socketConnection = require("./socketConnection");
 
 const io = require("socket.io")(server, {
   cors: {
@@ -67,7 +68,6 @@ db.once("open", () => {
 
 io.on("connection", (socket) => {
   socket.on("join-room", (roomId, playerData) => {
-    console.log("join-room");
     socket.join(roomId);
 
     const socketSet = io.sockets.adapter.rooms.get(roomId);
