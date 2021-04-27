@@ -16,7 +16,8 @@ const Pusher = require("pusher");
 
 const io = require("socket.io")(server, {
   cors: {
-    origin: process.env.CLIENT_URL,
+    // origin: process.env.CLIENT_URL,
+    origin: "*",
     methods: ["GET", "POST", "PATCH", "DELETE"],
     credentials: true,
   },
