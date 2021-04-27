@@ -85,8 +85,6 @@ exports.getRoomData = async (req, res, next) => {
   }
 };
 
-exports.postRoomData = async (req, res, next) => {};
-
 exports.patchRoomData = async (req, res, next) => {
   try {
     let updated;

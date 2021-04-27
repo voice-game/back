@@ -11,7 +11,6 @@ router
 router
   .route("/roadRoller/:roomId")
   .get(gameController.getRoomData)
-  .post(gameController.postRoomData)
   .patch(gameController.patchRoomData)
   .delete(gameController.deleteRoomDB);
 
@@ -24,7 +23,6 @@ router
 router
   .route("/monsterEscape/:roomId")
   .get(gameController.getRoomData)
-  .post(gameController.postRoomData)
   .patch(gameController.patchRoomData)
   .delete(gameController.deleteRoomDB);
 
@@ -37,7 +35,6 @@ router
 router
   .route("/energyBattle/:roomId")
   .get(gameController.getRoomData)
-  .post(gameController.postRoomData)
   .patch(gameController.patchRoomData)
   .delete(gameController.deleteRoomDB);
 

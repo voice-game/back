@@ -13,7 +13,6 @@ const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const Pusher = require("pusher");
-const socketConnection = require("./socketConnection");
 
 const io = require("socket.io")(server, {
   cors: {
