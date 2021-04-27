@@ -85,6 +85,10 @@ io.on("connection", (socket) => {
       socket.broadcast.to(roomId).emit("start-by-other", playerData);
     });
 
+    socket.on("close-modal", () => {
+      socket.broadcast.to(roomId).emit("close-other-modal", playerData);
+    });
+
     socket.on("leave-player", () => {
       socket.broadcast.to(roomId).emit("player-disconnected", playerData);
     });

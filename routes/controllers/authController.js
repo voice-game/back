@@ -6,7 +6,7 @@ exports.checkAuthorization = async (req, res, next) => {
     const player = await verifyToken(req.body.token);
 
     const now = new Date();
-    if (now.getMinutes === 0) {
+    if (now.getMinutes() === 0) {
       await Player.deleteMany({ email: "temp@temp.temp" });
     }
 
