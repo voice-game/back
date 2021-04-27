@@ -3,34 +3,42 @@ const router = express.Router();
 const gameController = require("./controllers/gameController");
 
 router
-  .routes("/")
-  .get(gameController.getSelectGame)
-  .post(gameController.postSelectedGame);
+  .route("/roadRoller")
+  .get(gameController.fetchRoomsDB)
+  .post(gameController.createRoomDB)
+  .patch(gameController.changeRoomStatus);
 
 router
-  .routes("/road-roller")
-  .get(gameController.getRoadRoller)
-  .post(gameController.postRoadRoller)
-  .patch(gameController.patchRoadRoller)
-  .delete(gameController.deleteRoadRoller);
+  .route("/roadRoller/:roomId")
+  .get(gameController.getRoomData)
+  .post(gameController.postRoomData)
+  .patch(gameController.patchRoomData)
+  .delete(gameController.deleteRoomDB);
 
 router
-  .routes("/flappy-bird")
-  .get(gameController.getFlappyBird)
-  .post(gameController.postFlappyBird)
-  .patch(gameController.patchFlappyBird)
-  .delete(gameController.deleteFlappyBird);
+  .route("/monsterEscape")
+  .get(gameController.fetchRoomsDB)
+  .post(gameController.createRoomDB)
+  .patch(gameController.changeRoomStatus);
 
 router
-  .routes("/sound-battle")
-  .get(gameController.getSoundBattleList)
-  .post(gameController.enterSoundBattle);
+  .route("/monsterEscape/:roomId")
+  .get(gameController.getRoomData)
+  .post(gameController.postRoomData)
+  .patch(gameController.patchRoomData)
+  .delete(gameController.deleteRoomDB);
 
 router
-  .routes("/games/sound-battle/:roomId")
-  .get(gameController.getSoundBattle)
-  .post(gameController.postSoundBattle)
-  .patch(gameController.patchSoundBattle)
-  .delete(gameController.deleteSoundBattle);
+  .route("/energyBattle")
+  .get(gameController.fetchRoomsDB)
+  .post(gameController.createRoomDB)
+  .patch(gameController.changeRoomStatus);
+
+router
+  .route("/energyBattle/:roomId")
+  .get(gameController.getRoomData)
+  .post(gameController.postRoomData)
+  .patch(gameController.patchRoomData)
+  .delete(gameController.deleteRoomDB);
 
 module.exports = router;

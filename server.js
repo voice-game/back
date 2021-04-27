@@ -9,10 +9,28 @@ const app = express();
 const mongoose = require("mongoose");
 const server = require("http").Server(app);
 const port = process.env.PORT || 5000;
-
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const Pusher = require("pusher");
+const socketConnection = require("./socketConnection");
+
+const io = require("socket.io")(server, {
+  cors: {
+    origin: process.env.CLIENT_URL,
+    methods: ["GET", "POST", "PATCH", "DELETE"],
+    credentials: true,
+  },
+});
+
+const pusher = new Pusher({
+  appId: process.env.PUSHER_APPID,
+  key: process.env.PUSHER_KEY,
+  secret: process.env.PUSHER_SECRET,
+  cluster: "ap3",
+  useTLS: true,
+});
+
 const authRouter = require("./routes/authRouter");
 const gameRouter = require("./routes/gameRouter");
 
@@ -29,11 +47,73 @@ mongoose
     useUnifiedTopology: true,
   })
   .then(() => {
-    console.log("MongoDB connection successed");
+    console.log("MongoDB connection success");
   })
   .catch((err) => {
     console.log(`ERROR: ${err.name}, ${err.message}`);
   });
+
+const db = mongoose.connection;
+
+db.once("open", () => {
+  const roomCollection = db.collection("rooms");
+  const changeRooms = roomCollection.watch();
+
+  changeRooms.on("change", () => {
+    pusher.trigger("rooms", "changed", {
+      message: "room changed",
+    });
+  });
+});
+
+io.on("connection", (socket) => {
+  socket.on("join-room", (roomId, playerData) => {
+    socket.join(roomId);
+
+    const socketSet = io.sockets.adapter.rooms.get(roomId);
+    const socketList = [...socketSet];
+
+    socket.broadcast
+      .to(roomId)
+      .emit("player-connected", { playerData, socketList });
+
+    socket.on("input-player", (data) => {
+      socket.broadcast.to(roomId).emit("input-other-player", data);
+    });
+
+    socket.on("start-game", () => {
+      socket.broadcast.to(roomId).emit("start-by-other", playerData);
+    });
+
+    socket.on("leave-player", () => {
+      socket.broadcast.to(roomId).emit("player-disconnected", playerData);
+    });
+
+    socket.on("disconnect", () => {
+      socket.broadcast.to(roomId).emit("player-disconnected", playerData);
+    });
+  });
+
+  socket.on("monsterescape-play", (roomId, userData) => {
+    socket.join(roomId);
+    socket.broadcast.to(roomId).emit("monsterescape-play", userData);
+  });
+
+  socket.on("monsterescape-start", (roomId) => {
+    socket.join(roomId);
+    io.in(roomId).emit("monsterescape-start");
+  });
+
+  socket.on("monsterescape-restart", (roomId) => {
+    socket.join(roomId);
+    io.in(roomId).emit("monsterescape-restart");
+  });
+
+  socket.on("monsterescape-finish", (roomId) => {
+    socket.join(roomId);
+    io.in(roomId).emit("monsterescape-finish");
+  });
+});
 
 app.use(cors());
 app.use(morgan("dev"));
