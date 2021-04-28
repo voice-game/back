@@ -13,7 +13,6 @@ const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const Pusher = require("pusher");
-const socketConnection = require("./socketConnection");
 
 const io = require("socket.io")(server, {
   cors: {
@@ -84,6 +83,10 @@ io.on("connection", (socket) => {
 
     socket.on("start-game", () => {
       socket.broadcast.to(roomId).emit("start-by-other", playerData);
+    });
+
+    socket.on("close-modal", () => {
+      socket.broadcast.to(roomId).emit("close-other-modal", playerData);
     });
 
     socket.on("leave-player", () => {
