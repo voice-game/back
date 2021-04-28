@@ -11,7 +11,7 @@ exports.checkAuthorization = async (req, res, next) => {
     }
 
     if (!player) {
-      return res.status(401).json({
+      return res.status(200).json({
         message: "Unauthorized",
       });
     }
