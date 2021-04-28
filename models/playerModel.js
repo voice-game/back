@@ -19,7 +19,7 @@ const PlayerSchema = new Schema({
     required: true,
   },
   gameRecords: {
-    roadRoller: {
+    littleForest: {
       type: Number,
       default: 0,
       required: true,

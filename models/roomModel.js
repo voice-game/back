@@ -10,7 +10,7 @@ const RoomSchema = new Schema({
   },
   title: {
     type: String,
-    enum: ["roadRoller", "monsterEscape", "energyBattle"],
+    enum: ["littleForest", "monsterEscape", "energyBattle"],
     required: true,
   },
   players: {
