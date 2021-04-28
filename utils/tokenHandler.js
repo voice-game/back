@@ -14,7 +14,8 @@ exports.verifyToken = async (clientToken) => {
 
   const decoded = jwt.verify(clientToken, process.env.JWT_SECRET);
   const player = await Player.findOne({ playerId: decoded.playerId });
-  const isExpired = decoded.exp * 1000 - Date.now() < 0;
+  const now = Date.now();
+  const isExpired = decoded.exp * 1000 - now < 0;
 
   if (!player || isExpired) {
     return null;
