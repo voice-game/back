@@ -1,6 +1,5 @@
 {
-  "extends": ["airbnb-base", "prettier", "plugin:node/recommended"],
-  "plugins": ["prettier"],
+  "extends": ["airbnb-base"],
   "env": {
      "commonjs": true,
      "es2021": true,
@@ -24,10 +23,11 @@
     "key-spacing": "warn",
     "object-curly-newline": "off",
     "eol-last": "warn",
-    "no-undef": "warn",
+    "no-undef": "off",
     "consistent-return": "off",
     "import/newline-after-import": ["off"],
     "no-unused-vars": ["warn", { "argsIgnorePattern": "req|res|next|val|document" }],
+    "no-unused-expressions": "off",
     "no-underscore-dangle": "off",
     "comma-dangle": ["warn", "always-multiline", { "objects": "always" }],
     "func-names": "off",
