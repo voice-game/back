@@ -8,6 +8,10 @@ const RoomSchema = new Schema({
     required: true,
     unique: true,
   },
+  roomNumber: {
+    type: Number,
+    default: Math.floor(Math.random() * 5000),
+  },
   title: {
     type: String,
     enum: ["littleForest", "monsterEscape", "energyBattle"],
