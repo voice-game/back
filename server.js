@@ -82,7 +82,7 @@ io.on("connection", (socket) => {
     });
 
     socket.on("start-game", () => {
-      socket.broadcast.to(roomId).emit("start-by-other", playerData);
+      io.in(roomId).emit("start-game");
     });
 
     socket.on("close-modal", () => {
