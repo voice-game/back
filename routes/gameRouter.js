@@ -30,7 +30,7 @@ router
   .route("/energyBattle")
   .get(gameController.fetchRoomsDB)
   .post(gameController.createRoomDB)
-  .patch(gameController.changeRoomStatus)
+  .patch(gameController.changeRoomStatus);
 
 router
   .route("/energyBattle/:roomId")

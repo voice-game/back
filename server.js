@@ -16,7 +16,6 @@ const Pusher = require("pusher");
 
 const io = require("socket.io")(server, {
   cors: {
-    // origin: process.env.CLIENT_URL,
     origin: "*",
     methods: ["GET", "POST", "PATCH", "DELETE"],
     credentials: true,
@@ -36,7 +35,7 @@ const gameRouter = require("./routes/gameRouter");
 
 const mongoURL = process.env.MONGO_URL.replace(
   "<PASSWORD>",
-  process.env.MONGO_PASSWORD
+  process.env.MONGO_PASSWORD,
 );
 
 mongoose

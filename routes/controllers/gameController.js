@@ -89,7 +89,7 @@ exports.getRoomData = async (req, res, next) => {
 exports.patchRoomData = async (req, res, next) => {
   try {
     let updated;
-    const { type, gameTitle, roomId, playerData, gameResult } = req.body;
+    const { type, gameTitle, roomId, playerData } = req.body;
 
     if (type === "GAME_RESULT") {
       updated = await Player.findByIdAndUpdate(playerData._id, {
@@ -147,7 +147,7 @@ exports.deleteRoomDB = async (req, res, next) => {
     const { gameTitle, roomId } = req.body;
     const deleted = await Room.findOneAndRemove({ roomId });
 
-    const deleteEmpty = await Room.deleteMany(
+    await Room.deleteMany(
       { title: gameTitle },
       { $set: { players: [] } },
     );
