@@ -24,6 +24,7 @@ exports.createRoomDB = async (req, res, next) => {
       roomId: newRoomId,
       createdBy,
       players: [createdBy],
+      roomNumber: Math.floor(Math.random() * 5000),
     });
 
     return res.status(201).json({
