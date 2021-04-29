@@ -41,6 +41,7 @@
     "spaced-comment": "warn",
     "no-console": "off",
     "class-methods-use-this": "warn",
-    "prefer-destructuring": ["error", { "object": true, "array": false }]
+    "prefer-destructuring": ["error", { "object": true, "array": false }],
+    "arrow-body-style": ["off"]
   }
 }

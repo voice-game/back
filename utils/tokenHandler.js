@@ -19,7 +19,7 @@ exports.verifyToken = async (clientToken) => {
 
   if (!player || isExpired) {
     return null;
-  } else {
-    return player;
   }
+
+  return player;
 };
