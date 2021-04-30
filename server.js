@@ -36,7 +36,7 @@ const gameController = require("./routes/controllers/gameController");
 
 const mongoURL = process.env.MONGO_URL.replace(
   "<PASSWORD>",
-  process.env.MONGO_PASSWORD
+  process.env.MONGO_PASSWORD,
 );
 
 mongoose

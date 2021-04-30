@@ -19,6 +19,7 @@ exports.fetchRoomsDB = async (req, res, next) => {
 exports.createRoomDB = async (req, res, next) => {
   try {
     const { gameTitle, newRoomId, createdBy } = req.body;
+
     const newRoom = await Room.create({
       title: gameTitle,
       roomId: newRoomId,
@@ -40,6 +41,7 @@ exports.createRoomDB = async (req, res, next) => {
 exports.changeRoomStatus = async (req, res, next) => {
   try {
     const { gameTitle, roomId, status } = req.body;
+
     const updatedOne = await Room.findOneAndUpdate(
       {
         roomId,
@@ -54,7 +56,6 @@ exports.changeRoomStatus = async (req, res, next) => {
     }
 
     const updatedRooms = await Room.find({ title: gameTitle });
-
     return res.status(200).json({
       message: "success",
       data: updatedRooms,

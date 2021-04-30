@@ -43,7 +43,7 @@ exports.postLogin = async (req, res, next) => {
       });
     }
 
-    const token = await createToken(uid);
+    const token = createToken(uid);
 
     res.status(200).json({
       message: "Log In Success",
