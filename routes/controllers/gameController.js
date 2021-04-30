@@ -145,13 +145,9 @@ exports.patchRoomData = async (req, res, next) => {
 exports.deleteRoomDB = async (req, res, next) => {
   try {
     const { gameTitle, roomId } = req.body;
-    const deleteEmpty = await Room.deleteMany(
-      { title: gameTitle },
-      { $set: { players: [] } }
-    );
     const deleted = await Room.findOneAndRemove({ roomId });
 
-    if (!deleted || !deleteEmpty) {
+    if (!deleted) {
       return res.status(304).json({
         message: "fail",
       });
@@ -166,5 +162,13 @@ exports.deleteRoomDB = async (req, res, next) => {
   } catch (err) {
     console.log(err);
     next(err);
+  }
+};
+
+exports.deleteRoomSocket = async (roomId) => {
+  try {
+    await Room.findOneAndRemove({ roomId });
+  } catch (err) {
+    console.log(err);
   }
 };
