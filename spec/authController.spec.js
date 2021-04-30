@@ -4,9 +4,9 @@ const { server } = require("../server");
 const { createToken } = require("../utils/tokenHandler");
 
 describe("Auth Controller Test", () => {
-  const authorizedPlayerId = "2957fabf-de71-4b72-b561-5d5fdf95ceef";
+  const authorizedPlayerId = "1377fcbb-3e6b-4752-b04c-ca3335ce7b2c";
   const authorizedEmail = "temp@temp.temp";
-  const authorizedDisplayName = "ATMOSPHERE";
+  const authorizedDisplayName = "CLOVER";
 
   const unauthorizedPlayerId = "12345";
 
@@ -46,24 +46,6 @@ describe("Auth Controller Test", () => {
   it("POST - login", (done) => {
     request(server)
       .post("/api/login")
-      .send({
-        email: authorizedEmail,
-        uid: authorizedPlayerId,
-        displayName: authorizedDisplayName,
-      })
-      .expect(200)
-      .expect("Content-Type", /json/)
-      .end((err, res) => {
-        if (err) { return done(err) }
-        expect(res.body.message).to.equal("Log In Success");
-
-        done();
-      });
-  });
-
-  it("POST - unauth", (done) => {
-    request(server)
-      .post("/api/unAuth")
       .send({
         email: authorizedEmail,
         uid: authorizedPlayerId,
