@@ -32,6 +32,7 @@ const pusher = new Pusher({
 
 const authRouter = require("./routes/authRouter");
 const gameRouter = require("./routes/gameRouter");
+const gameController = require("./routes/controllers/gameController");
 
 const mongoURL = process.env.MONGO_URL.replace(
   "<PASSWORD>",
@@ -59,6 +60,7 @@ db.once("open", () => {
   const changeRooms = roomCollection.watch();
 
   changeRooms.on("change", () => {
+    console.log("changed");
     pusher.trigger("rooms", "changed", {
       message: "room changed",
     });
@@ -68,7 +70,6 @@ db.once("open", () => {
 io.on("connection", (socket) => {
   socket.on("join-room", (roomId, playerData) => {
     socket.join(roomId);
-
     const socketSet = io.sockets.adapter.rooms.get(roomId);
     const socketList = [...socketSet];
 
@@ -89,10 +90,17 @@ io.on("connection", (socket) => {
     });
 
     socket.on("leave-player", () => {
+      socket.leave(roomId);
+      if (!socket.adapter.rooms.has(roomId)) {
+        gameController.deleteRoomSocket(roomId);
+      }
       socket.broadcast.to(roomId).emit("player-disconnected", playerData);
     });
 
     socket.on("disconnect", () => {
+      if (!socket.adapter.rooms.has(roomId)) {
+        gameController.deleteRoomSocket(roomId);
+      }
       socket.broadcast.to(roomId).emit("player-disconnected", playerData);
     });
   });

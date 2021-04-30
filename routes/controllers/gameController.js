@@ -148,11 +148,6 @@ exports.deleteRoomDB = async (req, res, next) => {
     const { gameTitle, roomId } = req.body;
     const deleted = await Room.findOneAndRemove({ roomId });
 
-    await Room.deleteMany(
-      { title: gameTitle },
-      { $set: { players: [] } }
-    );
-
     if (!deleted) {
       return res.status(304).json({
         message: "fail",
@@ -168,5 +163,13 @@ exports.deleteRoomDB = async (req, res, next) => {
   } catch (err) {
     console.log(err);
     next(err);
+  }
+};
+
+exports.deleteRoomSocket = async (roomId) => {
+  try {
+    await Room.findOneAndRemove({ roomId });
+  } catch (err) {
+    console.log(err);
   }
 };
